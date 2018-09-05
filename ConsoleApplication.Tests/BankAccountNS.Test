@@ -1,0 +1,133 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Xunit;
+
+//-----------------------------------------------------
+
+namespace BankAccountNS.Test
+{
+    public class BankAccTest
+    {
+        [Fact]
+        public void Debit_Test()
+        {
+            var acc = new BankAccount("Max", 123);
+
+            acc.Debit(20);
+
+            var result = acc.Balance;
+
+            Assert.Equal(103, result);
+        }
+
+        //-----------------------------------------------------
+
+        [Fact]
+        public void Debit_Test_With_NegativeAmount()
+        {
+            var acc = new BankAccount("Max", 123);
+
+            var action = new Action(() => acc.Debit(-20));
+
+            Assert.Throws<Exception>(action);
+        }
+
+        //-----------------------------------------------------
+
+        [Fact]
+        public void Debit_Test_With_FrozenAcc()
+        {
+            var acc = new BankAccount("Max", 123);
+
+            acc.FreezeAccount();
+
+            var action = new Action(() => acc.Debit(20));
+
+            Assert.Throws<Exception>(action);
+        }
+
+        //-----------------------------------------------------
+
+        [Fact]
+        public void Debit_Test_With_MoreAmount()
+        {
+            var acc = new BankAccount("Max", 123);
+
+            var action = new Action(() => acc.Debit(125));
+
+            Assert.Throws<Exception>(action);
+        }
+
+        //-----------------------------------------------------
+
+        [Fact]
+        public void Credit_Test()
+        {
+            var acc = new BankAccount("Max", 456);
+
+            acc.Credit(4);
+
+            var result = acc.Balance;
+
+            Assert.Equal(460, result);
+        }
+
+        //-----------------------------------------------------
+
+        [Fact]
+        public void Credit_Test_With_NegativeAmount()
+        {
+            var acc = new BankAccount("Max", 123);
+
+            var action = new Action(() => acc.Credit(-20));
+
+            Assert.Throws<Exception>(action);
+        }
+
+        //-----------------------------------------------------
+
+        [Fact]
+        public void Credit_Test_With_FrozenAcc()
+        {
+            var acc = new BankAccount("Max", 123);
+
+            acc.FreezeAccount();
+
+            var action = new Action(() => acc.Credit(20));
+
+            Assert.Throws<Exception>(action);
+        }
+
+        //-----------------------------------------------------
+
+        [Fact]
+        public void Acc_Frozen_Test()
+        {
+            var acc = new BankAccount("Max", 123);
+
+            acc.FreezeAccount();
+
+            var result = acc.State;
+
+            Assert.True(result);
+        }
+
+        //-----------------------------------------------------
+
+        [Fact]
+        public void Acc_UnFrozen_Test()
+        {
+            var acc = new BankAccount("Max", 123);
+
+            acc.UnfreezeAccount();
+
+            var result = acc.State;
+
+            Assert.False(result);
+        }
+    }
+}
+//-----------------------------------------------------
